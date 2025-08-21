@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduConnect - Education Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        secondary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .active-tab {
+            border-bottom: 3px solid #0ea5e9;
+        }
+        /* Custom scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c5c5c5;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-10">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 rounded-lg bg-primary-600 flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-white text-xl"></i>
+                </div>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">EduConnect</h1>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div class="relative hidden md:block">
+                    <i class="fas fa-bell text-gray-600 hover:text-primary-600 cursor-pointer text-xl"></i>
+                    <span class="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center">3</span>
+                </div>
+                <div class="relative">
+                    <img class="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-primary-600" src="https://randomuser.me/api/portraits/men/75.jpg" alt="User">
+                </div>
+                <button class="md:hidden text-gray-600" id="mobile-menu-button">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile menu (hidden by default) -->
+    <div class="hidden bg-white shadow-lg py-4 px-6 md:hidden" id="mobile-menu">
+        <div class="flex flex-col space-y-4">
+            <a href="#" class="text-primary-600 font-medium py-2 border-b border-gray-100">
+                <i class="fas fa-home mr-3"></i>Dashboard
+            </a>
+            <a href="#" class="text-gray-700 font-medium py-2 border-b border-gray-100">
+                <i class="fas fa-calendar-alt mr-3"></i>Schedule
+            </a>
+            <a href="#" class="text-gray-700 font-medium py-2 border-b border-gray-100">
+                <i class="fas fa-tasks mr-3"></i>Assignments
+            </a>
+            <a href="#" class="text-gray-700 font-medium py-2 border-b border-gray-100">
+                <i class="fas fa-graduation-cap mr-3"></i>Grades
+            </a>
+            <a href="#" class="text-gray-700 font-medium py-2 border-b border-gray-100">
+                <i class="fas fa-cog mr-3"></i>Settings
+            </a>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 py-6 flex-grow">
+        <!-- Account Type Selector -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+            <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4 justify-center">
+                <button class="px-4 py-3 rounded-lg bg-primary-600 text-white font-semibold flex items-center justify-center">
+                    <i class="fas fa-chalkboard-teacher mr-2"></i>Teacher
+                </button>
+                <button class="px-4 py-3 rounded-lg bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 flex items-center justify-center">
+                    <i class="fas fa-user-graduate mr-2"></i>Student
+                </button>
+                <button class="px-4 py-3 rounded-lg bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 flex items-center justify-center">
+                    <i class="fas fa-users mr-2"></i>Parent
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Main Content -->
+            <div class="lg:col-span-3 space-y-6">
+                <!-- Welcome Card -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-2">Welcome, Dr. James Wilson!</h2>
+                    <p class="text-gray-600">You have 3 classes today with a total of 72 students. Your first class starts at 9:00 AM.</p>
+                    <div class="flex flex-wrap gap-3 mt-4">
+                        <button class="bg-primary-50 hover:bg-primary-100 text-primary-700 px-4 py-2 rounded-lg flex items-center">
+                            <i class="fas fa-plus-circle mr-2"></i> New Assignment
+                        </button>
+                        <button class="bg-secondary-50 hover:bg-secondary-100 text-secondary-700 px-4 py-2 rounded-lg flex items-center">
+                            <i class="fas fa-calendar-plus mr-2"></i> Schedule Event
+                        </button>
+                        <button class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center">
+                            <i class="fas fa-bullhorn mr-2"></i> Make Announcement
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Classes Section -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
+                        <h3 class="text-xl font-semibold text-gray-800">Your Classes</h3>
+                        <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg flex items-center">
+                            <i class="fas fa-plus mr-2"></i> Add New Class
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="dashboard-card bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 transition-all duration-300 cursor-pointer">
+                            <h4 class="font-semibold text-gray-800">Mathematics 101</h4>
+                            <p class="text-gray-600 text-sm mt-1">24 Students • 9:00 AM</p>
+                            <div class="flex items-center mt-3">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                                    <i class="fas fa-calculator text-blue-600"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-xs text-gray-500">Room</p>
+                                    <p class="text-sm font-medium">B-204</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                <button class="bg-white hover:bg-blue-100 text-blue-600 text-xs px-3 py-1 rounded-full border border-blue-200">
+                                    View Roster
+                                </button>
+                                <button class="bg-white hover:bg-blue-100 text-blue-600 text-xs px-3 py-1 rounded-full border border-blue-200">
+                                    Assign Work
+                                </button>
+                            </div>
+                        </div>
+                        <div class="dashboard-card bg-green-50 p-4 rounded-lg border-l-4 border-green-500 transition-all duration-300 cursor-pointer">
+                            <h4 class="font-semibold text-gray-800">Physics Advanced</h4>
+                            <p class="text-gray-600 text-sm mt-1">18 Students • 11:30 AM</p>
+                            <div class="flex items-center mt-3">
+                                <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                                    <i class="fas fa-atom text-green-600"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-xs text-gray-500">Room</p>
+                                    <p class="text-sm font-medium">Sci-103</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap gap-2 mt-4">
+                                <button class="bg-white hover:bg-green-100 text-green-600 text-xs px-3 py-1 rounded-full border border-green-200">
+                                    View Roster
+                                </button>
+                                <button class="bg-white hover:bg-green-100 text-green-600 text-xs px-3 py-1 rounded-full border border-green-200">
+                                    Assign Work
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Announcements -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Recent Announcements</h3>
+                    <div class="space-y-4 custom-scrollbar" style="max-height: 400px; overflow-y: auto;">
+                        <div class="border-l-4 border-primary-600 pl-4 py-2">
+                            <h4 class="font-semibold">Quarterly Exams Schedule</h4>
+                            <p class="text-gray-600 text-sm">Posted 2 hours ago</p>
+                            <p class="text-gray-700 mt-2">The quarterly examination schedule has been published. Please check the schedule section for details.</p>
+                            <button class="text-primary-600 hover:text-primary-800 text-sm mt-2 flex items-center">
+                                <i class="fas fa-eye mr-1"></i> View Details
+                            </button>
+                        </div>
+                        <div class="border-l-4 border-secondary-600 pl-4 py-2">
+                            <h4 class="font-semibold">Science Fair Project Submissions</h4>
+                            <p class="text-gray-600 text-sm">Posted 1 day ago</p>
+                            <p class="text-gray-700 mt-2">Science fair projects are due next Friday. Please ensure all submissions are made through the portal.</p>
+                            <button class="text-secondary-600 hover:text-secondary-800 text-sm mt-2 flex items-center">
+                                <i class="fas fa-eye mr-1"></i> View Details
+                            </button>
+                        </div>
+                        <div class="border-l-4 border-yellow-500 pl-4 py-2">
+                            <h4 class="font-semibold">Parent-Teacher Meeting</h4>
+                            <p class="text-gray-600 text-sm">Posted 2 days ago</p>
+                            <p class="text-gray-700 mt-2">Parent-teacher meetings are scheduled for next week. Please use the booking system to reserve your slot.</p>
+                            <button class="text-yellow-600 hover:text-yellow-800 text-sm mt-2 flex items-center">
+                                <i class="fas fa-eye mr-1"></i> View Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-6">
+                <!-- Profile Card -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <div class="flex flex-col items-center">
+                        <img class="w-24 h-24 rounded-full border-4 border-primary-600" src="https://randomuser.me/api/portraits/men/75.jpg" alt="Profile">
+                        <h3 class="mt-4 text-xl font-bold text-gray-800">Dr. James Wilson</h3>
+                        <p class="text-gray-600">Mathematics & Physics Teacher</p>
+                        <div class="mt-4 grid grid-cols-2 gap-4 w-full">
+                            <div class="bg-blue-50 p-3 rounded-lg text-center">
+                                <p class="text-2xl font-bold text-primary-600">5</p>
+                                <p class="text-xs text-gray-600">Classes</p>
+                            </div>
+                            <div class="bg-green-50 p-3 rounded-lg text-center">
+                                <p class="text-2xl font-bold text-secondary-600">72</p>
+                                <p class="text-xs text-gray-600">Students</p>
+                            </div>
+                        </div>
+                        <button class="w-full mt-4 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-edit mr-2"></i> Edit Profile
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Upcoming Events -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Upcoming Events</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <div class="bg-primary-600 text-white p-2 rounded-lg mr-3 flex-shrink-0">
+                                <p class="text-sm font-bold">20</p>
+                                <p class="text-xs">OCT</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Annual Science Fair</h4>
+                                <p class="text-gray-600 text-sm">10:00 AM - 3:00 PM</p>
+                                <button class="text-primary-600 hover:text-primary-800 text-xs mt-1 flex items-center">
+                                    <i class="fas fa-info-circle mr-1"></i> Details
+                                </button>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-secondary-600 text-white p-2 rounded-lg mr-3 flex-shrink-0">
+                                <p class="text-sm font-bold">25</p>
+                                <p class="text-xs">OCT</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold">Parent-Teacher Conference</h4>
+                                <p class="text-gray-600 text-sm">1:00 PM - 4:00 PM</p>
+                                <button class="text-secondary-600 hover:text-secondary-800 text-xs mt-1 flex items-center">
+                                    <i class="fas fa-info-circle mr-1"></i> Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="w-full mt-4 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-calendar-plus mr-2"></i> View All Events
+                    </button>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Quick Actions</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button class="bg-blue-50 hover:bg-blue-100 text-primary-600 p-3 rounded-lg flex flex-col items-center transition-colors duration-200">
+                            <i class="fas fa-tasks text-xl mb-2"></i>
+                            <span class="text-sm">Assignments</span>
+                        </button>
+                        <button class="bg-green-50 hover:bg-green-100 text-secondary-600 p-3 rounded-lg flex flex-col items-center transition-colors duration-200">
+                            <i class="fas fa-graduation-cap text-xl mb-2"></i>
+                            <span class="text-sm">Grades</span>
+                        </button>
+                        <button class="bg-purple-50 hover:bg-purple-100 text-purple-600 p-3 rounded-lg flex flex-col items-center transition-colors duration-200">
+                            <i class="fas fa-calendar-alt text-xl mb-2"></i>
+                            <span class="text-sm">Schedule</span>
+                        </button>
+                        <button class="bg-yellow-50 hover:bg-yellow-100 text-yellow-600 p-3 rounded-lg flex flex-col items-center transition-colors duration-200">
+                            <i class="fas fa-comments text-xl mb-2"></i>
+                            <span class="text-sm">Messages</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation for Mobile -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white shadow-lg md:hidden flex justify-around items-center p-3">
+        <a href="#" class="text-primary-600 flex flex-col items-center">
+            <i class="fas fa-home text-lg"></i>
+            <span class="text-xs mt-1">Home</span>
+        </a>
+        <a href="#" class="text-gray-600 flex flex-col items-center">
+            <i class="fas fa-calendar text-lg"></i>
+            <span class="text-xs mt-1">Schedule</span>
+        </a>
+        <a href="#" class="text-gray-600 flex flex-col items-center">
+            <i class="fas fa-tasks text-lg"></i>
+            <span class="text-xs mt-1">Tasks</span>
+        </a>
+        <a href="#" class="text-gray-600 flex flex-col items-center">
+            <i class="fas fa-cog text-lg"></i>
+            <span class="text-xs mt-1">Settings</span>
+        </a>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Account type switching
+        document.addEventListener('DOMContentLoaded', function() {
+            const accountButtons = document.querySelectorAll('.bg-gray-100');
+            const teacherButton = document.querySelector('.bg-primary-600');
+            
+            accountButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Switch active state
+                    teacherButton.classList.remove('bg-primary-600', 'text-white');
+                    teacherButton.classList.add('bg-gray-100', 'text-gray-700');
+                    
+                    this.classList.remove('bg-gray-100', 'text-gray-700');
+                    this.classList.add('bg-primary-600', 'text-white');
+                    
+                    // Update button text for demo purposes
+                    const role = this.textContent.trim();
+                    document.querySelector('h2').textContent = `Welcome, ${role} User!`;
+                    
+                    // In a real app, this would load different dashboard content
+                    console.log('Switching to ' + role + ' view');
+                });
+            });
+
+            // Add hover effects to all buttons
+            const allButtons = document.querySelectorAll('button');
+            allButtons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.classList.add('shadow-md');
+                });
+                button.addEventListener('mouseleave', function() {
+                    this.classList.remove('shadow-md');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
